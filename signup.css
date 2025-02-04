@@ -69,15 +69,15 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #5E412F; /* Soft Cream */
-    color: white;
+    background-color: transparent; /* Soft Cream */
+    color: #3E2723;
     font-weight: bold;
     font-family: 'Georgia', serif;
-
+    border: 2px solid #6D4C41;
 }
 
 .google-btn img, .apple-btn img {
-    width: 20px;
+    width: 30px;
     margin-right: 10px;
 }
 
@@ -93,13 +93,13 @@ button {
 /* "or" Text */
 .or-text {
     margin: 10px 0;
-    font-size: 14px;
+    font-size: 16px;
     opacity: 0.6;
 }
 
 /* Terms & Sign-in Text */
 .terms {
-    font-size: 12px;
+    font-size: 16px;
     opacity: 0.7;
 }
 
@@ -110,14 +110,14 @@ button {
 
 .signin-text {
     margin-top: 20px;
-    font-size: 14px;
+    font-size: 18px;
     opacity: 0.8;
 }
 
 .signin-btn {
-    background-color: transparent;
+    background-color: #4B3D26;
     border: 1px solid #6D4C41;
-    color: #3E2723;
+    color: white;
     font-weight: bold;
 }
 
@@ -125,7 +125,7 @@ button {
 footer {
     text-align: center;
     padding: 10px;
-    font-size: 12px;
+    font-size: 14px;
     opacity: 0.8;
 }
 
