@@ -5,7 +5,7 @@ body {
     font-family: 'Georgia', serif;
     background-color: #F3E5AB; /* Warm Beige (Book-Like) */
     color: #3E2723; /* Dark Brown for contrast */
-    background-image: url('./imgs/WhatsApp\ Image\ 2025-01-28\ at\ 12.24.10_798393a4.jpg'); /* Path to your image */
+    background-image: url('../imgs/WhatsApp\ Image\ 2025-01-28\ at\ 12.24.10_798393a4.jpg'); /* Path to your image */
     background-size: cover; /* Ensures the image covers the full screen */
     background-position: center; /* Centers the image */
     background-repeat: no-repeat; /* Prevents tiling */
