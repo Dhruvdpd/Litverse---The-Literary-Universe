@@ -1,17 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getBookById, transformGoogleBookToBookDetails } from '../services/bookApi';
-import { BookOpen, Book, Home as HomeIcon, Compass, User, Info } from 'lucide-react';
+import {
+  getBookById,
+  transformGoogleBookToBookDetails,
+} from '../services/bookApi';
+import {
+  BookOpen,
+  Book,
+  Home as HomeIcon,
+  Compass,
+  User,
+  Info,
+} from 'lucide-react';
 import type { BookDetails } from '../types/book';
 
-interface Comment {
-  id: number;
-  user: {
-    name: string;
-    avatar: string;
-  };
-  date: string;
-  text: string;
+
+
+interface Review {
+  _id: string;
+  username: string;
+  createdAt: string;
+  content: string;
   likes: number;
 }
 
@@ -19,8 +28,9 @@ function BookDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const [book, setBook] = useState<BookDetails | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [replyText, setReplyText] = useState<string>('');
-  const [activeReplyId, setActiveReplyId] = useState<number | null>(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [newReview, setNewReview] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchBookDetails = async () => {
@@ -39,31 +49,56 @@ function BookDetailsPage() {
       }
     };
 
+    const fetchReviews = async () => {
+      if (!id) return;
+      try {
+        const res = await fetch(`/api/reviews?bookId=${id}`);
+        const data = await res.json();
+        setReviews(data);
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      }
+    };
+
     fetchBookDetails();
+    fetchReviews();
   }, [id]);
 
-  const comments: Comment[] = [
-    {
-      id: 1,
-      user: {
-        name: 'Marty',
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=40&h=40&fit=crop',
-      },
-      date: 'August 15, 2024',
-      text: "I'm a bit of a personal finance nut. I've been investing & teaching personal finance for about ten years...",
-      likes: 10,
-    },
-    {
-      id: 2,
-      user: {
-        name: 'Kai',
-        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=40&h=40&fit=crop',
-      },
-      date: 'March 14, 2022',
-      text: 'Oof - this book was big major yikes. At first I was curious why my parents recommended me this book...',
-      likes: 5,
-    },
-  ];
+  const handleShopClick = () => {
+    if (book) {
+      const query = `${book.title} ${book.author}`;
+      const url = `https://www.amazon.in/s?k=${encodeURIComponent(query)}`;
+      window.open(url, '_blank');
+    }
+  };
+
+  const handleReviewSubmit = async () => {
+    console.log('Submitting review:', newReview);
+    if (!newReview.trim() || !id) return;
+
+    try {
+      setIsSubmitting(true);
+      const res = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          bookId: id,
+          content: newReview,
+          username: 'AnonymousUser', // Replace with actual username from auth if available
+        }),
+      });
+
+      const savedReview = await res.json();
+      setReviews((prev) => [savedReview, ...prev]);
+      setNewReview('');
+    } catch (error) {
+      console.error('Error submitting review:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -137,58 +172,52 @@ function BookDetailsPage() {
                 </p>
               )}
               <div className="flex gap-4">
-                <button className="bg-gray-200 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors">
+                <button
+                  onClick={handleShopClick}
+                  className="bg-gray-200 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors"
+                >
                   Shop this Series
                 </button>
               </div>
             </div>
           </section>
 
-          {/* Comments Section */}
+          {/* Reviews Section */}
           <section>
-            <h2 className="text-2xl font-bold mb-6">Reader Reviews</h2>
+            <h2 className="text-2xl font-bold mb-4">Reader Reviews</h2>
+
+            {/* Add a Review */}
+            <div className="mb-6">
+              <textarea
+                className="w-full border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-[#653c8c]"
+                rows={4}
+                value={newReview}
+                onChange={(e) => setNewReview(e.target.value)}
+                placeholder="Write your thoughts about this book..."
+              />
+              <button
+              onClick={handleReviewSubmit}
+              className="mt-2 bg-[#653c8c] text-white px-4 py-2 rounded-md hover:bg-[#4c2d66]"
+            >
+              Submit
+            </button>
+
+            </div>
+
+            {/* Display Reviews */}
             <div className="space-y-6">
-              {comments.map((comment) => (
-                <div key={comment.id} className="border-b border-gray-200 pb-6">
-                  <div className="flex items-center gap-3 mb-3">
-                    <img
-                      src={comment.user.avatar}
-                      alt={comment.user.name}
-                      className="w-10 h-10 rounded-full"
-                    />
-                    <div>
-                      <h4 className="font-semibold">{comment.user.name}</h4>
-                      <p className="text-sm text-gray-500">{comment.date}</p>
-                    </div>
+              {reviews.map((review) => (
+                <div key={review._id} className="border-b border-gray-200 pb-6">
+                  <div className="mb-2">
+                    <h4 className="font-semibold">{review.username}</h4>
+                    <p className="text-sm text-gray-500">
+                      {new Date(review.createdAt).toLocaleDateString()}
+                    </p>
                   </div>
-                  <p className="text-gray-700 mb-3">{comment.text}</p>
-                  <div className="flex gap-4">
-                    <button className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
-                      👍 Like <span>{comment.likes}</span>
-                    </button>
-                    {/* <button
-                      onClick={() =>
-                        setActiveReplyId(activeReplyId === comment.id ? null : comment.id)
-                      }
-                      className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
-                    >
-                      💬 Reply
-                    </button> */}
+                  <p className="text-gray-700 mb-2">{review.content}</p>
+                  <div className="flex items-center gap-2 text-gray-600">
+                    👍 {review.likes}
                   </div>
-                  {activeReplyId === comment.id && (
-                    <div className="mt-4 flex gap-2">
-                      <input
-                        type="text"
-                        value={replyText}
-                        onChange={(e) => setReplyText(e.target.value)}
-                        placeholder="Write a reply..."
-                        className="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#653c8c]"
-                      />
-                      <button className="bg-[#653c8c] text-white px-4 py-2 rounded-md hover:bg-[#4c2d66]">
-                        Reply
-                      </button>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>

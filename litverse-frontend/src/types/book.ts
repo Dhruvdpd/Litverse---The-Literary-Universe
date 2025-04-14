@@ -10,6 +10,7 @@ export interface BookDetails {
     rating: number;
     ratingsCount: number;
     categories: string[];
+    buyLink?: string;
   }
   
   export interface GoogleBookVolume {
@@ -26,5 +27,9 @@ export interface BookDetails {
       averageRating?: number;
       ratingsCount?: number;
       categories?: string[];
+      infoLink?: string; // 👈 Add this
+    };
+    saleInfo?: {
+      buyLink?: string; // 👈 Add this
     };
   }

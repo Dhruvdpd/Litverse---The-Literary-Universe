@@ -7,6 +7,7 @@ import path from 'path';
 import communityRoutes from './routes/communityRoutes.js';
 import postRoutes from './routes/postRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import reviewRoutes from './routes/reviews.js';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use('/uploads', express.static('uploads'));
 app.use('/api/users', userRoutes);
 app.use('/api/communities', communityRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)

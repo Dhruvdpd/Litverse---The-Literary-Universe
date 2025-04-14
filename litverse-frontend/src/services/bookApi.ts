@@ -62,5 +62,6 @@ export function transformGoogleBookToBookDetails(volume: GoogleBookVolume): Book
     rating: volume.volumeInfo.averageRating || 0,
     ratingsCount: volume.volumeInfo.ratingsCount || 0,
     categories: volume.volumeInfo.categories || [],
+    buyLink: volume.saleInfo?.buyLink || volume.volumeInfo.infoLink || '',
   };
 }

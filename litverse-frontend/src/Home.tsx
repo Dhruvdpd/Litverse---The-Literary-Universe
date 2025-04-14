@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Book,
   Home as HomeIcon,
@@ -10,39 +10,17 @@ import {
   Share2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 interface Post {
-  id: number;
+  _id: string;
   title: string;
   content: string;
   author: string;
   upvotes: number;
-  comments: number;
+  comments: any[];
   image?: string;
 }
-
-const samplePosts: Post[] = [
-  {
-    id: 1,
-    title: "Just finished reading 'The Midnight Library' - Here are my thoughts",
-    content:
-      'This book completely changed my perspective on life choices and parallel universes...',
-    author: 'bookworm42',
-    upvotes: 1234,
-    comments: 89,
-    image:
-      'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'
-  },
-  {
-    id: 2,
-    title: "Weekly Book Club Discussion: 'Project Hail Mary'",
-    content:
-      "Let's discuss Andy Weir's latest sci-fi masterpiece! What did you think about...",
-    author: 'scifi_lover',
-    upvotes: 856,
-    comments: 156
-  }
-];
 
 const sliderMessages = [
   'Explore LitVerse now!',
@@ -53,6 +31,23 @@ const sliderMessages = [
 ];
 
 function Home() {
+  const [topPosts, setTopPosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    const fetchTopPosts = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/posts');
+        const sortedPosts = res.data
+          .sort((a: Post, b: Post) => b.upvotes - a.upvotes)
+          .slice(0, 3);
+        setTopPosts(sortedPosts);
+      } catch (err) {
+        console.error('Failed to fetch posts:', err);
+      }
+    };
+    fetchTopPosts();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#F3E5AB] flex">
       {/* Left Sidebar */}
@@ -100,10 +95,10 @@ function Home() {
             </div>
           </div>
 
-          {/* Posts */}
-          {samplePosts.map(post => (
+          {/* Top Posts */}
+          {topPosts.map(post => (
             <article
-              key={post.id}
+              key={post._id}
               className="bg-white rounded-lg shadow-md overflow-hidden"
             >
               <div className="p-6">
@@ -113,7 +108,7 @@ function Home() {
                 <p className="text-[#3E2723]/80 mb-4 font-serif">{post.content}</p>
                 {post.image && (
                   <img
-                    src={post.image}
+                    src={`http://localhost:5000/uploads/${post.image}`}
                     alt="Post"
                     className="w-full h-64 object-cover mb-4 rounded-lg"
                   />
@@ -127,7 +122,7 @@ function Home() {
                     </button>
                     <button className="flex items-center gap-1">
                       <MessageCircle size={18} />
-                      {post.comments}
+                      {post.comments.length}
                     </button>
                     <button>
                       <Share2 size={18} />
@@ -169,7 +164,6 @@ function Home() {
                 <h3 className="text-white font-bold">John Smith</h3>
                 <p className="text-white/60">Fantasy Author</p>
               </div>
-        
             </div>
           </div>
         </div>
