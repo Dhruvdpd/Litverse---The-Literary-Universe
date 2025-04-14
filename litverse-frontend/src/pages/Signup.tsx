@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Book } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import bgImage from '../assets/cover-image.jpg';
+import logo from '../assets/logo_for_the_website_according_to_the.jpeg';
 
 const genres = [
   "Fiction", "Fantasy", "Mystery", "Romance", "Science Fiction",
@@ -78,9 +80,13 @@ function Signup() {
 
   const renderInitialView = () => (
     <>
+      <div
+  className="min-h-screen bg-[#F3E5AB] bg-cover bg-center bg-fixed"
+  style={{ backgroundImage: `url(${bgImage})` }}
+></div>
       <div className="flex-1 flex items-center justify-center">
         <div className="text-[#3E2723] text-center">
-          <Book size={120} className="mx-auto mb-4" />
+          <img src={logo} alt="LitVerse Logo" className="mx-auto mb-3 w-80 h-80" />
           <h1 className="text-4xl font-bold font-serif">LitVerse</h1>
         </div>
       </div>

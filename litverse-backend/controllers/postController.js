@@ -24,7 +24,7 @@ export const createPost = async (req, res) => {
     content: req.body.content,
     author: req.body.author,
     community: req.body.community,
-    // topic: req.body.topic
+    image: req.file ? req.file.filename : null // Handle image if uploaded
   });
 
   try {

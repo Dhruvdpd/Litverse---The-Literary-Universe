@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BookOpen, Book, Home as HomeIcon, Compass, User, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { searchBooks, transformGoogleBookToBookDetails } from '../services/bookApi';
@@ -9,6 +9,7 @@ function BookExplore() {
   const [books, setBooks] = useState<BookDetails[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchPerformed, setSearchPerformed] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false); // 👈 for placeholder removal
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
@@ -28,14 +29,12 @@ function BookExplore() {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
+    if (e.key === 'Enter') handleSearch();
   };
 
   return (
-    <div className="min-h-screen bg-[#F3E5AB] flex">
-      {/* Left Sidebar */}
+    <div className="min-h-screen bg-[#F3E5AB] flex font-sans">
+      {/* Sidebar remains unchanged */}
       <aside className="w-64 bg-[#5E412F] h-screen fixed left-0 p-6 bg-opacity-90">
         <div className="flex items-center gap-2 mb-8">
           <Book className="text-white" size={32} />
@@ -61,26 +60,43 @@ function BookExplore() {
         </nav>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 px-6 ml-64 py-6 font-serif">
+      {/* Main */}
+      <main className="flex-1 px-6 ml-64 py-6">
         <div className="text-center my-8">
           <div className="relative inline-block w-[60%]">
             <input
               type="text"
-              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#653c8c] focus:border-transparent"
+              className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#653c8c] focus:border-transparent font-sans"
               placeholder="Search for books..."
               value={searchQuery}
+              onFocus={() => setHasInteracted(true)} // 👈 hide placeholder
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={handleKeyPress}
             />
             <button
-              onClick={handleSearch}
+              onClick={() => {
+                setHasInteracted(true);
+                handleSearch();
+              }}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#653c8c] text-white px-4 py-2 rounded-md hover:bg-[#4c2d66] transition-colors"
             >
-              Search
+              🔍
             </button>
           </div>
         </div>
+
+        {/* Pre-search message */}
+        {!searchPerformed && !hasInteracted && (
+          <div className="text-center mt-24 text-[#5E412F]">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/29/29302.png"
+              alt="Open Book"
+              className="mx-auto w-24 mb-4 opacity-80"
+            />
+            <h2 className="text-3xl font-serif font-bold">Dive into the World of Books</h2>
+            <p className="mt-2 text-[#6D4C41] text-lg">Search your favorite titles, authors or genres above ✨</p>
+          </div>
+        )}
 
         {isLoading && (
           <div className="text-center text-gray-600">
@@ -90,7 +106,7 @@ function BookExplore() {
         )}
 
         {searchPerformed && !isLoading && (
-          <div className="text-center text-lg font-bold my-8 text-[#3E2723]">
+          <div className="text-center text-lg font-bold my-8 text-[#3E2723] font-serif">
             📖 {books.length} results for "{searchQuery}"
           </div>
         )}
@@ -105,8 +121,8 @@ function BookExplore() {
                   className="w-20 h-32 object-cover rounded-md mr-6"
                 />
                 <div>
-                  <h2 className="text-lg font-bold text-[#3E2723]">{book.title}</h2>
-                  <p className="text-[#5E412F] mt-1">by {book.author}</p>
+                  <h2 className="text-lg font-bold text-[#3E2723] font-serif">{book.title}</h2>
+                  <p className="text-[#5E412F] mt-1 italic">by {book.author}</p>
                   <div className="text-sm mt-1 text-[#6D4C41]">
                     {book.rating > 0 ? (
                       <>
@@ -122,11 +138,7 @@ function BookExplore() {
                   </div>
                   <div className="flex gap-3 mt-3">
                     <button className="flex items-center gap-2 bg-[#388e3c] text-white px-4 py-2 rounded-md hover:bg-[#2d722f] transition-colors">
-                      <BookOpen className="w-4 h-4" />
-                      Want to Read
-                    </button>
-                    <button className="flex items-center gap-2 bg-[#f4f1ea] border border-[#653c8c] text-[#653c8c] px-4 py-2 rounded-md hover:bg-[#e9e6df] transition-colors">
-                      📚 Get a copy
+                      📖 Want to Read
                     </button>
                   </div>
                 </div>

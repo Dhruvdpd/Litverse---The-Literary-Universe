@@ -50,11 +50,11 @@ function Signup() {
   const renderInitialView = () => (
     <>
       <div className="flex-1 flex items-center justify-center">
-        <div className="text-[#3E2723] text-center">
-          <Book size={120} className="mx-auto mb-4" />
-          <h1 className="text-4xl font-bold font-serif">LitVerse</h1>
-        </div>
-      </div>
+                <div className="text-[#3E2723] text-center">
+                  <Book size={120} className="mx-auto mb-4" />
+                  <h1 className="text-4xl font-bold font-serif">LitVerse</h1>
+                </div>
+              </div>
 
       <div className="flex-1 max-w-[400px] text-center p-8 bg-white/90 rounded-lg shadow-xl mr-[100px]">
         <h1 className="text-2xl font-bold text-[#3E2723] mb-2 font-serif">Welcome to LitVerse</h1>

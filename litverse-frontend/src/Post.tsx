@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Book, X, Image, BarChart2, Smile, MapPin } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+
 interface PostData {
   id: number;
   title: string;
@@ -15,34 +16,49 @@ interface PostData {
 
 function Post() {
   const [content, setContent] = useState('');
+  const [image, setImage] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null); // Ref for hidden input
   const navigate = useNavigate();
   const location = useLocation();
   const selectedCommunity = location.state?.community;
-  // console.log(selectedCommunity)
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setImage(event.target.files[0]);
+    }
+  };
+
+  const triggerFileSelect = () => {
+    fileInputRef.current?.click(); // Trigger hidden file input
+  };
+
   const handlePost = async () => {
     if (!content.trim() || !selectedCommunity) return;
-  
-    const newPost = {
-      title: content.split('\n')[0] || 'New Post',
-      content: content,
-      author: 'currentUser', // Replace with actual current user from auth
-      community: selectedCommunity,
-      topic: selectedCommunity.topic
-    };
-  
+
+    const formData = new FormData();
+    formData.append('title', content.split('\n')[0] || 'New Post');
+    formData.append('content', content);
+    formData.append('author', 'currentUser'); // Replace with actual current user
+    formData.append('community', selectedCommunity);
+
+    if (image) {
+      formData.append('image', image);
+    }
+
     try {
-      console.log(newPost)
-      const response = await axios.post('http://localhost:5000/api/posts', newPost); // Update with actual backend port/path
-      console.log("Post created:", response.data);
-  
+      const response = await axios.post('http://localhost:5000/api/posts', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Post created:', response.data);
       alert('Post created successfully!');
       navigate('/community');
     } catch (error) {
-      console.error("Failed to create post:", error);
+      console.error('Failed to create post:', error);
       alert('Something went wrong while creating the post.');
     }
   };
-  
 
   return (
     <div className="min-h-screen bg-[#F3E5AB] flex">
@@ -84,18 +100,20 @@ function Post() {
                   
                   <div className="flex justify-between items-center mt-4">
                     <div className="flex gap-4">
-                      <button className="text-[#8B5E3C] hover:text-[#6D4C41]">
+                      <button
+                        type="button"
+                        onClick={triggerFileSelect}
+                        className="text-[#8B5E3C] hover:text-[#6D4C41]"
+                      >
                         <Image size={20} />
                       </button>
-                      <button className="text-[#8B5E3C] hover:text-[#6D4C41]">
-                        <BarChart2 size={20} />
-                      </button>
-                      <button className="text-[#8B5E3C] hover:text-[#6D4C41]">
-                        <Smile size={20} />
-                      </button>
-                      <button className="text-[#8B5E3C] hover:text-[#6D4C41]">
-                        <MapPin size={20} />
-                      </button>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        ref={fileInputRef}
+                        className="hidden"
+                      />
                     </div>
                     <button
                       onClick={handlePost}
@@ -104,6 +122,7 @@ function Post() {
                       Post
                     </button>
                   </div>
+
                   <p className="text-[#9E7E5F] text-sm mt-4">Everyone can reply</p>
                 </div>
               </div>
@@ -113,7 +132,7 @@ function Post() {
       </main>
 
       {/* Right Sidebar */}
-      <aside className="w-80 bg-[#5E412F] h-screen fixed right-0 p-6 bg-opacity-90">
+      <aside className="w-64 bg-[#5E412F] h-screen fixed right-0 p-6 bg-opacity-90">
         <h2 className="text-xl font-bold text-white mb-4 font-serif">Community Guidelines</h2>
         <div className="space-y-4">
           <div className="bg-white/10 p-4 rounded-lg">

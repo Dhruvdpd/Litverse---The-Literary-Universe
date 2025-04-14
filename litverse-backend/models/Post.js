@@ -35,17 +35,16 @@ const postSchema = new mongoose.Schema({
   comments: [commentSchema],
   community: {
     type: String,
-    // required: true,
     default: 'poetry',
     ref: 'Community'
   },
-  // topic: {
-  //   type: String,
-  //   // required: true
-  // },
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  image: {
+    type: String, // Store the image path or URL
+    default: ''
   }
 });
 

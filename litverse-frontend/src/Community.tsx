@@ -342,7 +342,7 @@ interface CommunityPost {
   content: string;
   author: string;
   upvotes: number;
-  comments: any[]; // not used here
+  comments: any[];
   community: string;
   topic: string;
   createdAt: string;
@@ -383,6 +383,15 @@ const topics = {
   ]
 };
 
+const topicImages: Record<string, string> = {
+  Fiction: 'https://img.icons8.com/color/48/book-shelf.png',
+  Fantasy: 'https://img.icons8.com/color/48/magic-wand.png',
+  'Sci-Fi': 'https://img.icons8.com/color/48/rocket--v1.png',
+  Romance: 'https://img.icons8.com/color/48/romance.png',
+  Poetry: 'https://img.icons8.com/color/48/quill.png',
+  Horror: 'https://img.icons8.com/color/48/ghost.png',
+};
+
 export default function Community() {
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(null);
@@ -421,9 +430,26 @@ export default function Community() {
       <aside className="w-64 bg-[#5E412F] h-screen fixed left-0 p-6">
         <div className="flex items-center gap-2 mb-8">
           <Book className="text-white" size={32} />
-          <h1 className="text-2xl font-bold text-white">LitVerse</h1>
+          <h1 className="text-2xl font-serif text-white">LitVerse</h1>
         </div>
-        <div className="mt-6">
+        <button
+            style={{
+              marginTop: '15px',
+              backgroundColor: '#8B5E3C',
+              marginLeft: '7px',
+              borderRadius: '8px',
+              color: 'white',
+              padding: '8px 16px',
+              border: 'none',
+              cursor: 'pointer',
+              fontFamily: 'serif', // ✅ Corrected here
+            }}
+            
+            onClick={() => { navigate('/home') }}
+          >
+            Home
+          </button>
+        <div className="mt-6 font-serif ">
           <button
             onClick={() => setIsTopicsOpen(!isTopicsOpen)}
             className="w-full flex items-center justify-between text-white p-3 rounded-lg hover:bg-[#8B5E3C]"
@@ -431,37 +457,23 @@ export default function Community() {
             <span>Topics</span>
             <ChevronDown className={`transform transition-transform ${isTopicsOpen ? 'rotate-180' : ''}`} />
           </button>
-          <button
-            style={{
-              marginTop: '15px',
-              marginLeft: '15px',
-              backgroundColor: '#CC7722', // Ochre shade
-              borderRadius: '8px',
-              color: 'white',
-              padding: '8px 16px',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-            onClick={() => { navigate('/home') }}
-          >
-            Home
-          </button>
-
+          
 
           {isTopicsOpen && (
-            <div className="mt-2 ml-4 space-y-2">
+            <div className="mt-4 ml-2 space-y-3">
               {Object.keys(topics).map(topic => (
                 <button
                   key={topic}
                   onClick={() => {
-                    
                     setSelectedTopic(topic);
                     setSelectedCommunity(null);
-                    navigate(`/community/${topic}`,{state:{topic}});
+                    navigate(`/community/${topic}`, { state: { topic } });
                   }}
-                  className={`w-full text-left text-white p-2 rounded hover:bg-[#8B5E3C] ${selectedTopic === topic ? 'bg-[#8B5E3C]' : ''}`}
+                  className={`w-full flex items-center gap-2 text-white p-2 rounded-lg hover:bg-[#8B5E3C] ${selectedTopic === topic ? 'bg-[#8B5E3C]' : ''}`}
+                  style={{ backgroundColor: selectedTopic === topic ? '#8B5E3C' : '#A97454' }}
                 >
-                  {topic}
+                  <img src={topicImages[topic]} alt={topic} className="w-6 h-6" />
+                  <span>{topic}</span>
                 </button>
               ))}
             </div>
@@ -480,28 +492,40 @@ export default function Community() {
       {/* Main Content */}
       <main className="flex-1 px-6 mx-64">
         <div className="max-w-3xl mx-auto py-6">
-          
-            <div className="text-center text-[#3E2723] py-12">
-              <h2 className="text-2xl font-bold mb-4">Select a Topic to Explore Communities</h2>
-              <p>Choose from the topics menu on the left to discover communities and their posts.</p>
+          {!selectedTopic ? (
+            <div className="flex flex-col items-center justify-center h-[60vh] text-[#3E2723]">
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png"
+                alt="Placeholder"
+                className="w-40 h-40 mb-6 opacity-80"
+              />
+              <h2 className="text-2xl font-serif mb-4">Select a Topic to Explore Communities</h2>
+              <p className="text-center max-w-md font-serif">
+                Choose from the genres in the sidebar to view popular communities and posts.
+              </p>
             </div>
-          
+          ) : (
+            <div className="text-center text-[#3E2723] py-12">
+              <h2 className="text-2xl font-bold mb-4">{selectedTopic} Communities</h2>
+              <p>Coming soon: list of posts under this topic.</p>
+            </div>
+          )}
         </div>
       </main>
 
       {/* Right Sidebar */}
       <aside className="w-80 bg-[#5E412F] h-screen fixed right-0 p-6">
-        <h3 className="text-xl font-bold text-white mb-6">Popular Communities</h3>
+        <h3 className="text-xl font-serif text-white mb-6">Popular Communities</h3>
         <div className="space-y-4">
           {Object.values(topics).flat().slice(0, 5).map((community) => (
-            <div key={community.id} className="flex items-center justify-between bg-white/10 p-4 rounded-lg">
+            <div key={community.id} className="flex items-center justify-between bg-white/10 p-4 rounded-lg font-serif">
               <span className="text-white">{community.name}</span>
-              <button className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm hover:bg-blue-600 transition-colors">
-                Join
+              <button className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm hover:bg-blue-600 transition-colors font-serif">
+                Navigate
               </button>
             </div>
           ))}
-          <button className="text-blue-400 hover:text-blue-300 w-full text-center mt-4">
+          <button className="text-blue-400 hover:text-blue-300 w-full text-center mt-4 font-serif">
             See more
           </button>
         </div>
@@ -509,3 +533,5 @@ export default function Community() {
     </div>
   );
 }
+
+

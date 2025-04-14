@@ -10,16 +10,16 @@ import ComPosts from './ComPosts';
 import BookDetailsPage from './pages/BookDetails';
 import BookExplore from './pages/BookExplore';
 import MyBooks from './pages/MyBooks';
-import Layout from './components/Layout';
+import WelcomeAnimation from './pages/WelcomeAnimation';
 
 function App() {
   return (
     <Router>
-      {/* <Layout> */}
       <Routes>
         <Route path="/" element={<Navigate to="/signin" replace />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
+        <Route path="/welcome" element={<WelcomeAnimation />} />
         <Route 
           path="/home" 
           element={
@@ -51,7 +51,6 @@ function App() {
           } 
         />
       </Routes>
-      {/* </Layout> */}
     </Router>
   );
 }

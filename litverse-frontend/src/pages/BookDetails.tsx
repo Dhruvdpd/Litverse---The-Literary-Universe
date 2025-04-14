@@ -137,9 +137,6 @@ function BookDetailsPage() {
                 </p>
               )}
               <div className="flex gap-4">
-                <button className="bg-[#276749] text-white px-6 py-2 rounded-md hover:bg-[#1a4731] transition-colors">
-                  Want to Read
-                </button>
                 <button className="bg-gray-200 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-300 transition-colors">
                   Shop this Series
                 </button>
@@ -169,14 +166,14 @@ function BookDetailsPage() {
                     <button className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
                       👍 Like <span>{comment.likes}</span>
                     </button>
-                    <button
+                    {/* <button
                       onClick={() =>
                         setActiveReplyId(activeReplyId === comment.id ? null : comment.id)
                       }
                       className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
                     >
                       💬 Reply
-                    </button>
+                    </button> */}
                   </div>
                   {activeReplyId === comment.id && (
                     <div className="mt-4 flex gap-2">

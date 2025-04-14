@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Book } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import bgImage from '../assets/cover-image.jpg';
+import logo from '../assets/logo_for_the_website_according_to_the.jpeg';
 
 function Signin() {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ function Signin() {
       if (response.ok) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data));
-        navigate('/home');
+        navigate('/welcome', { state: { from: '/home' } });
       } else {
         setError(data.message || 'Invalid credentials');
       }
@@ -36,11 +37,14 @@ function Signin() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F3E5AB] bg-[url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=228&q=80')] bg-cover bg-center bg-fixed">
+    <div
+      className="min-h-screen bg-[#F3E5AB] bg-cover bg-center bg-fixed"
+      style={{ backgroundImage: `url(${bgImage})` }}
+    >
       <div className="container mx-auto flex min-h-[90vh] items-center justify-center px-4">
         <div className="flex-1 flex items-center justify-center">
           <div className="text-[#3E2723] text-center">
-            <Book size={120} className="mx-auto mb-4" />
+            <img src={logo} alt="LitVerse Logo" className="mx-auto mb-3 w-80 h-80" />
             <h1 className="text-4xl font-bold font-serif">LitVerse</h1>
           </div>
         </div>
