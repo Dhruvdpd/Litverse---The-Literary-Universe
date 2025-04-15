@@ -11,6 +11,8 @@ import BookDetailsPage from './pages/BookDetails';
 import BookExplore from './pages/BookExplore';
 import MyBooks from './pages/MyBooks';
 import WelcomeAnimation from './pages/WelcomeAnimation';
+import About from './pages/About';
+import Profile from './pages/Profile';
 
 
 function App() {
@@ -32,6 +34,8 @@ function App() {
           <Route path="/bookexplore" element={<BookExplore />} />
           <Route path="/book/:id" element={<BookDetailsPage />} />
           <Route path="/my-books" element={<MyBooks />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/profile" element={<Profile />} />
         
         <Route 
           path="/community" 

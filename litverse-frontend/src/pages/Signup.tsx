@@ -95,21 +95,21 @@ function Signup() {
         <h1 className="text-2xl font-bold text-[#3E2723] mb-2 font-serif">Welcome to LitVerse</h1>
         <h2 className="text-lg text-[#3E2723]/80 mb-6 font-serif">Join the world of stories.</h2>
 
-        <button className="w-full py-3 mb-4 flex items-center justify-center bg-transparent border-2 border-[#6D4C41] text-[#3E2723] rounded-full font-bold font-serif">
+        {/* <button className="w-full py-3 mb-4 flex items-center justify-center bg-transparent border-2 border-[#6D4C41] text-[#3E2723] rounded-full font-bold font-serif">
           <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" 
                alt="Google Logo" 
                className="w-6 h-6 mr-2" />
           Sign up with Google
-        </button>
+        </button> */}
 
-        <button className="w-full py-3 mb-4 flex items-center justify-center bg-transparent border-2 border-[#6D4C41] text-[#3E2723] rounded-full font-bold font-serif">
+        {/* <button className="w-full py-3 mb-4 flex items-center justify-center bg-transparent border-2 border-[#6D4C41] text-[#3E2723] rounded-full font-bold font-serif">
           <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" 
                alt="Apple Logo" 
                className="w-6 h-6 mr-2" />
           Sign up with Apple
-        </button>
+        </button> */}
 
-        <p className="text-[#3E2723]/60 my-4">or</p>
+        {/* <p className="text-[#3E2723]/60 my-4">or</p> */}
 
         <button 
           onClick={() => setCurrentStep('signup')}
