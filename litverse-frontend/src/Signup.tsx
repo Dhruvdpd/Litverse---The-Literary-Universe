@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Book } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import logo from './assets/logo_for_the_website_according_to_the.jpeg';
 
 // Define available genres
 const genres = [
@@ -50,10 +51,12 @@ function Signup() {
   const renderInitialView = () => (
     <>
       <div className="flex-1 flex items-center justify-center">
-                <div className="text-[#3E2723] text-center">
-                  <Book size={120} className="mx-auto mb-4" />
-                  <h1 className="text-4xl font-bold font-serif">LitVerse</h1>
-                </div>
+      <div className="flex-1 flex items-center justify-center">
+        <div className="text-[#3E2723] text-center">
+          <img src={logo} alt="LitVerse Logo" className="mx-auto mb-3 w-80 h-80" />
+          <h1 className="text-4xl font-bold font-serif">LitVerse</h1>
+        </div>
+      </div>
               </div>
 
       <div className="flex-1 max-w-[400px] text-center p-8 bg-white/90 rounded-lg shadow-xl mr-[100px]">

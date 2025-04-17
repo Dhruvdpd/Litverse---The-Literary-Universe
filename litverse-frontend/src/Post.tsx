@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { Book, X, Image, BarChart2, Smile, MapPin } from 'lucide-react';
+import { Book, X, Image, } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+// import { AuthContext } from './context/AuthContext';
 
 interface PostData {
   id: number;
